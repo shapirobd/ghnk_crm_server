@@ -26,6 +26,7 @@ class Album {
 	 */
 	static async findAll() {
 		const sql = "SELECT id, name, url, code FROM albums ORDER BY id";
+		connect();
 		const results = await db.promise().query(sql);
 		console.log("album results: ", results[0]);
 		return results[0];
@@ -44,6 +45,7 @@ class Album {
 		const sql = `INSERT INTO albums ${columns} VALUES ${values}`;
 		console.log(sql);
 
+		connect();
 		const results = await db.promise().query(sql);
 		console.log("results: ", results[0]);
 		return results[0];
@@ -53,6 +55,7 @@ class Album {
 		console.log(albumID);
 		let sql = "DELETE FROM albums WHERE id = " + albumID;
 		console.log(sql);
+		connect();
 		const results = await db.promise().query(sql);
 		console.log("results: ", results[0]);
 		return results[0];
@@ -73,6 +76,7 @@ class Album {
 			valuesString += `${columns[i]} = ${values[i]}`;
 		}
 		sql += `${valuesString} WHERE id = ${albumID}`;
+		connect();
 		const results = await db.promise().query(sql);
 		console.log("results: ", results[0]);
 		return results[0];

@@ -27,6 +27,7 @@ class Venue {
 	static async findAll() {
 		const sql =
 			"SELECT id, name, address, city, state, link FROM venues ORDER BY name ASC";
+		connect();
 		const results = await db.promise().query(sql);
 		console.log("results: ", results[0]);
 		return results[0];
@@ -44,10 +45,12 @@ class Venue {
 		const sql = `INSERT INTO venues ${columns} VALUES ${values}`;
 		console.log("sql", sql);
 
+		connect();
 		const insertResults = await db.promise().query(sql);
 		console.log("insertResults: ", insertResults[0]);
 
 		const selectSql = `SELECT id FROM venues WHERE name = '${name}' AND address = '${address}'`;
+		connect();
 		const selectResults = await db.promise().query(selectSql);
 		console.log("selectResults: ", selectResults[0]);
 		return selectResults[0];

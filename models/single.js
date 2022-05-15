@@ -26,7 +26,7 @@ class Single {
 	 */
 	static async findAll() {
 		const sql = "SELECT id, name, url, code FROM singles ORDER BY id";
-		connect()
+		connect();
 		const results = await db.promise().query(sql);
 		console.log("results: ", results[0]);
 		return results[0];
@@ -45,6 +45,7 @@ class Single {
 		const sql = `INSERT INTO singles ${columns} VALUES ${values}`;
 		console.log(sql);
 
+		connect();
 		const results = await db.promise().query(sql);
 		console.log("results: ", results[0]);
 		return results[0];
@@ -54,6 +55,7 @@ class Single {
 		console.log(singleID);
 		let sql = "DELETE FROM singles WHERE id = " + singleID;
 		console.log(sql);
+		connect();
 		const results = await db.promise().query(sql);
 		console.log("results: ", results[0]);
 		return results[0];
@@ -74,6 +76,7 @@ class Single {
 			valuesString += `${columns[i]} = ${values[i]}`;
 		}
 		sql += `${valuesString} WHERE id = ${singleID}`;
+		connect();
 		const results = await db.promise().query(sql);
 		console.log("results: ", results[0]);
 		return results[0];

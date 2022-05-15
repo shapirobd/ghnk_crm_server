@@ -34,6 +34,7 @@ class Show {
 			sql = sql =
 				"SELECT id, venueID, date, time, ticket_link, is_solo FROM shows ORDER BY id";
 		}
+		connect();
 		const results = await db.promise().query(sql);
 		console.log("results: ", results[0]);
 		return results[0];
@@ -59,6 +60,7 @@ class Show {
 		const sql = `INSERT INTO shows ${columns} VALUES ${values}`;
 		console.log(sql);
 
+		connect();
 		const results = await db.promise().query(sql);
 		console.log("results: ", results[0]);
 		return results[0];
@@ -72,6 +74,7 @@ class Show {
 		console.log(showID);
 		let sql = "DELETE FROM shows WHERE id = " + showID;
 		console.log(sql);
+		connect();
 		const results = await db.promise().query(sql);
 		console.log("results: ", results[0]);
 		return results[0];
@@ -101,6 +104,7 @@ class Show {
 			valuesString += `${columns[i]} = ${values[i]}`;
 		}
 		sql += `${valuesString} WHERE id = ${showID}`;
+		connect();
 		const results = await db.promise().query(sql);
 		console.log("results: ", results[0]);
 		return results[0];

@@ -33,9 +33,11 @@ class User {
 			"INSERT INTO users (username, password, first_name, last_name) VALUES ";
 		insertSql += `('${username}', '${hashedPwd}', '${first_name}', '${last_name}')`;
 		// sql += "SELECT * FROM users WHERE id = LAST_INSERT_ID();";
+		connect();
 		await db.promise().query(insertSql);
 
 		let selectSql = "SELECT * FROM shows WHERE id = LAST_INSERT_ID()";
+		connect();
 		const result = await db.promise().query(selectSql);
 		const user = results[0];
 		return user;
@@ -50,6 +52,7 @@ class User {
 	 */
 	static async authenticate(username, password) {
 		let sql = `SELECT * FROM users WHERE username='${username}'`;
+		connect();
 		const result = await db.promise().query(sql);
 		if (result[0].length === 1) {
 			const user = result[0][0];
@@ -68,6 +71,7 @@ class User {
 	 * @return {Array} Array of user objects (each object containing username, email, first_name, last_name)
 	 */
 	static async findAll() {
+		connect();
 		const userRes = await db.query(
 			`
             SELECT username,
@@ -88,6 +92,7 @@ class User {
 	 * @return {Object} Object containing username, email, first_name and last_name of the found user
 	 */
 	static async findOne(username) {
+		connect();
 		const userRes = await db.query(
 			`
             SELECT username,
@@ -116,6 +121,7 @@ class User {
 	 * @return {Object} Object containing username, email, first_name, last_name, weight, weight_goal, calorie_goal, *   *     				bookmarks and eatenMEals of the editted user
 	 */
 	static async editProfile(data, username) {
+		connect();
 		let query = "";
 		let count = 1;
 
@@ -145,18 +151,21 @@ class User {
 	 * @returns success message upon deletion
 	 */
 	static async deleteUser(username) {
+		connect();
 		await db.query(
 			`
 			DELETE FROM users_meals WHERE username=$1
 		`,
 			[username]
 		);
+		connect();
 		await db.query(
 			`
 			DELETE FROM bookmarks WHERE username=$1
 		`,
 			[username]
 		);
+		connect();
 		await db.query(
 			`
 			DELETE FROM users WHERE username=$1
@@ -173,6 +182,7 @@ class User {
 	 * @returns the user that was found, or undefined if there was no user found
 	 */
 	static async isFieldTaken(keyword, value) {
+		connect();
 		const results = await db.query(`SELECT * FROM users WHERE ${keyword}=$1`, [
 			value,
 		]);
