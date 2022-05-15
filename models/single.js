@@ -1,4 +1,4 @@
-const db = require("../db");
+const { db, connect } = require("../db");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const { BCRYPT_WORK_FACTOR, SECRET_KEY } = require("../config");
@@ -26,7 +26,9 @@ class Single {
 	 */
 	static async findAll() {
 		const sql = "SELECT id, name, url, code FROM singles ORDER BY id";
+		connect()
 		const results = await db.promise().query(sql);
+		db.destroy();
 		console.log("results: ", results[0]);
 		return results[0];
 	}
@@ -43,7 +45,7 @@ class Single {
 		let values = `('${name}', '${url}', '${code}')`;
 		const sql = `INSERT INTO singles ${columns} VALUES ${values}`;
 		console.log(sql);
-
+		
 		const results = await db.promise().query(sql);
 		console.log("results: ", results[0]);
 		return results[0];

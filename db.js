@@ -15,10 +15,12 @@ console.log("process.env.DATABASE_USERNAME = ", process.env.DATABASE_USERNAME);
 console.log("process.env.DATABASE_PASSWORD = ", process.env.DATABASE_PASSWORD);
 console.log("process.env.DATABASE_NAME = ", process.env.DATABASE_NAME);
 
-db.connect(function (err) {
-	if (err) throw err;
-	console.log("Connected!");
-});
+var connect = () => {
+	db.connect(function (err) {
+		if (err) throw err;
+		console.log("Connected!");
+	})
+}
 
 // let db = new Client({
 // 	connectionString: DB_URI,
@@ -26,4 +28,4 @@ db.connect(function (err) {
 
 // db.connect();
 
-module.exports = db;
+module.exports = { db, connect };
