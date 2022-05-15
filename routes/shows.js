@@ -24,7 +24,8 @@ const router = new express.Router();
 router.get("/", async function (req, res, next) {
 	try {
 		const getVenueNames = req.query.getVenueNames;
-		const shows = await Show.findAll(getVenueNames);
+		const forSite = req.query.forSite;
+		const shows = await Show.findAll(getVenueNames, forSite);
 		console.log("shows: ", shows);
 		return res.json(shows);
 	} catch (e) {

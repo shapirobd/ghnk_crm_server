@@ -1,4 +1,4 @@
-const db = require("../db");
+const { db, connect } = require("../db");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const { BCRYPT_WORK_FACTOR, SECRET_KEY } = require("../config");
@@ -25,11 +25,14 @@ class Show {
 	 *  Finds and returns all users from the database.
 	 * @return {Array} Array of user objects (each object containing username, email, first_name, last_name)
 	 */
-	static async findAll(getVenueNames) {
+	static async findAll(getVenueNames, forSite) {
 		let sql = "";
 		if (getVenueNames) {
 			sql =
 				"SELECT s.id, v.name AS venue_name, s.date, s.time, s.ticket_link, s.is_solo FROM shows s JOIN venues v ON s.venueID = v.id ORDER BY s.id";
+		} else if (forSite) {
+			sql =
+				"SELECT v.name AS venue, v.address, s.date, s.time, v.link AS venueLink, s.ticket_link AS ticketLink, s.is_solo AS solo FROM shows s JOIN venues v ON s.venueID = v.id ORDER BY s.id";
 		} else {
 			sql = sql =
 				"SELECT id, venueID, date, time, ticket_link, is_solo FROM shows ORDER BY id";

@@ -14,9 +14,8 @@ console.log("process.env.DATABASE_HOST = ", process.env.DATABASE_HOST);
 console.log("process.env.DATABASE_USERNAME = ", process.env.DATABASE_USERNAME);
 console.log("process.env.DATABASE_PASSWORD = ", process.env.DATABASE_PASSWORD);
 console.log("process.env.DATABASE_NAME = ", process.env.DATABASE_NAME);
-console.log("db = ", db)
 
-var connect = () => {
+function connect (connectMethod) {
 	db.connect(function (err) {
 		if (err) throw err;
 		console.log("Connected!");
