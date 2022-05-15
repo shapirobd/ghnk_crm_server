@@ -28,7 +28,6 @@ class Single {
 		const sql = "SELECT id, name, url, code FROM singles ORDER BY id";
 		connect()
 		const results = await db.promise().query(sql);
-		db.destroy();
 		console.log("results: ", results[0]);
 		return results[0];
 	}
@@ -45,7 +44,7 @@ class Single {
 		let values = `('${name}', '${url}', '${code}')`;
 		const sql = `INSERT INTO singles ${columns} VALUES ${values}`;
 		console.log(sql);
-		
+
 		const results = await db.promise().query(sql);
 		console.log("results: ", results[0]);
 		return results[0];
