@@ -21,6 +21,14 @@ var connect = () => {
 		if (err) throw err;
 		console.log("Connected!");
 	})
+
+	db.on('error', function(err) {
+		if (err.code === "PROTOCOL_CONNECTION_LOST") {
+			connect();
+		} else {
+			throw err;
+		}
+	})
 }
 
 connect();
