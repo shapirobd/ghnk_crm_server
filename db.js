@@ -23,6 +23,8 @@ var connect = () => {
 	})
 }
 
+connect();
+
 // let db = new Client({
 // 	connectionString: DB_URI,
 // });
