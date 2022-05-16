@@ -23,6 +23,8 @@ function connect (connectMethod) {
 
 	db.on('error', function(err) {
 		if (err.code === "PROTOCOL_CONNECTION_LOST") {
+			console.log("*****************************")
+			db.destroy();
 			connect();
 		} else {
 			throw err;
