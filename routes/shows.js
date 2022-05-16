@@ -27,6 +27,7 @@ router.get("/", async function (req, res, next) {
 		const forSite = req.query.forSite;
 		const shows = await Show.findAll(getVenueNames, forSite);
 		console.log("shows: ", shows);
+		// res.setHeader('Access-Control-Allow-Origin', '*')
 		return res.json(shows);
 	} catch (e) {
 		return next(e);

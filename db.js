@@ -15,15 +15,18 @@ console.log("process.env.DATABASE_USERNAME = ", process.env.DATABASE_USERNAME);
 console.log("process.env.DATABASE_PASSWORD = ", process.env.DATABASE_PASSWORD);
 console.log("process.env.DATABASE_NAME = ", process.env.DATABASE_NAME);
 
-function connect (connectMethod) {
+function connect () {
 	db.connect(function (err) {
-		if (err) throw err;
+		// if (err) throw err;
 		console.log("Connected!");
 	})
 
 	db.on('error', function(err) {
-		if (err.code === "PROTOCOL_CONNECTION_LOST") {
-			console.log("*****************************")
+		if (
+			err.code === "PROTOCOL_CONNECTION_LOST" ||
+			err.code === "ER_ACCESS_DENIED_ERROR"
+		) {
+			console.log("*****************************");
 			db.destroy();
 			connect();
 		} else {
