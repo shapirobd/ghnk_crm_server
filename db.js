@@ -2,12 +2,23 @@ const { Client } = require("pg");
 const mysql = require("mysql2");
 const { DB_URI } = require("./config");
 
-var db = mysql.createConnection({
+var db2 = mysql.createConnection({
 	host: process.env.DATABASE_HOST || "localhost",
 	port: 3306,
 	user: process.env.DATABASE_USERNAME || "root",
 	password: process.env.DATABASE_PASSWORD || "potentiate",
 	database: process.env.DATABASE_NAME || "ghnk",
+});
+
+var db = mysql.createPool({
+	host: process.env.DATABASE_HOST || "localhost",
+	port: 3306,
+	user: process.env.DATABASE_USERNAME || "root",
+	password: process.env.DATABASE_PASSWORD || "potentiate",
+	database: process.env.DATABASE_NAME || "ghnk",
+	waitForConnections: true,
+	connectionLimit: 10,
+	queueLimit: 0,
 });
 
 console.log("process.env.DATABASE_HOST = ", process.env.DATABASE_HOST);
@@ -16,7 +27,7 @@ console.log("process.env.DATABASE_PASSWORD = ", process.env.DATABASE_PASSWORD);
 console.log("process.env.DATABASE_NAME = ", process.env.DATABASE_NAME);
 
 function connect () {
-	db.connect(function (err) {
+	db.getConnection(function (err) {
 		// if (err) throw err;
 		console.log("Connected!");
 	})

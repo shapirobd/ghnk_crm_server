@@ -27,7 +27,9 @@ const router = new express.Router();
 router.post("/register", async function (req, res, next) {
 	try {
 		continueIfValidRegister(req, next);
+		console.log("***")
 		const user = await User.register(req.body);
+		console.log(user)
 		const token = jwt.sign({ username: user.username }, SECRET_KEY);
 		return res.json({ user, token });
 	} catch (e) {

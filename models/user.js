@@ -29,17 +29,20 @@ class User {
 	 */
 	static async register({ username, password, first_name, last_name }) {
 		const hashedPwd = await bcrypt.hash(password, BCRYPT_WORK_FACTOR);
+		console.log(hashedPwd)
 		let insertSql =
 			"INSERT INTO users (username, password, first_name, last_name) VALUES ";
 		insertSql += `('${username}', '${hashedPwd}', '${first_name}', '${last_name}')`;
 		// sql += "SELECT * FROM users WHERE id = LAST_INSERT_ID();";
 		connect();
+		console.log(insertSql)
 		await db.promise().query(insertSql);
 
-		let selectSql = "SELECT * FROM shows WHERE id = LAST_INSERT_ID()";
+		let selectSql = `SELECT username, first_name, last_name FROM users WHERE username = '${username}' AND password = '${hashedPwd}'`;
+		console.log(selectSql)
 		connect();
-		const result = await db.promise().query(selectSql);
-		const user = results[0];
+		const result = await db.promise().query(selectSql)
+		const user = result[0];
 		return user;
 	}
 
