@@ -17,7 +17,7 @@ var db = mysql.createPool({
 	password: process.env.DATABASE_PASSWORD || "potentiate",
 	database: process.env.DATABASE_NAME || "ghnk",
 	waitForConnections: true,
-	connectionLimit: 10,
+	connectionLimit: 25,
 	queueLimit: 0,
 });
 
