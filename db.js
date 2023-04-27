@@ -35,7 +35,8 @@ function connect () {
 	db.on('error', function(err) {
 		if (
 			err.code === "PROTOCOL_CONNECTION_LOST" ||
-			err.code === "ER_ACCESS_DENIED_ERROR"
+			err.code === "ER_ACCESS_DENIED_ERROR" ||
+			err.code === "ER_USER_LIMIT_REACHED"
 		) {
 			console.log("*****************************");
 			db.destroy();
