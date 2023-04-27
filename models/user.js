@@ -38,7 +38,7 @@ class User {
 		console.log(insertSql)
 		await db.promise().query(insertSql);
 
-		let selectSql = `SELECT username, first_name, last_name FROM users WHERE username = '${username}' AND password = '${hashedPwd}'`;
+		let selectSql = `SELECT username, first_name, last_name, is_admin FROM users WHERE username = '${username}' AND password = '${hashedPwd}'`;
 		console.log(selectSql)
 		connect();
 		const result = await db.promise().query(selectSql)

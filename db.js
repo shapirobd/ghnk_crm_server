@@ -2,7 +2,7 @@ const { Client } = require("pg");
 const mysql = require("mysql2");
 const { DB_URI } = require("./config");
 
-var db2 = mysql.createConnection({
+var db = mysql.createConnection({
 	host: process.env.DATABASE_HOST || "localhost",
 	port: 3306,
 	user: process.env.DATABASE_USERNAME || "root",
@@ -10,14 +10,14 @@ var db2 = mysql.createConnection({
 	database: process.env.DATABASE_NAME || "ghnk",
 });
 
-var db = mysql.createPool({
+var pool = mysql.createPool({
 	host: process.env.DATABASE_HOST || "localhost",
 	port: 3306,
 	user: process.env.DATABASE_USERNAME || "root",
 	password: process.env.DATABASE_PASSWORD || "potentiate",
 	database: process.env.DATABASE_NAME || "ghnk",
 	waitForConnections: true,
-	connectionLimit: 25,
+	connectionLimit: 10,
 	queueLimit: 0,
 });
 
@@ -27,7 +27,7 @@ console.log("process.env.DATABASE_PASSWORD = ", process.env.DATABASE_PASSWORD);
 console.log("process.env.DATABASE_NAME = ", process.env.DATABASE_NAME);
 
 function connect () {
-	db.getConnection(function (err) {
+	db.connect(function (err) {
 		// if (err) throw err;
 		console.log("Connected!");
 	})
@@ -35,8 +35,7 @@ function connect () {
 	db.on('error', function(err) {
 		if (
 			err.code === "PROTOCOL_CONNECTION_LOST" ||
-			err.code === "ER_ACCESS_DENIED_ERROR" ||
-			err.code === "ER_USER_LIMIT_REACHED"
+			err.code === "ER_ACCESS_DENIED_ERROR"
 		) {
 			console.log("*****************************");
 			db.destroy();
@@ -55,4 +54,4 @@ connect();
 
 // db.connect();
 
-module.exports = { db, connect };
+module.exports = { db, connect, pool };

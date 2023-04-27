@@ -41,7 +41,7 @@ class Album {
 		let { name, url, code } = data;
 
 		let columns = `(name, url, code)`;
-		let values = `('${name.replace("'", "\\'")}', '${url}', '${code}')`;
+		let values = `('${name}', '${url}', '${code}')`;
 		const sql = `INSERT INTO albums ${columns} VALUES ${values}`;
 		console.log(sql);
 
@@ -66,7 +66,7 @@ class Album {
 
 		console.log("code", code);
 		let columns = ["name", "url", "code"];
-		let values = [`'${name.replace("'", "\\'")}'`, `'${url}'`, `'${code}'`];
+		let values = [`'${name}'`, `'${url}'`, `'${code}'`];
 
 		let sql = "UPDATE albums SET ";
 		let valuesString = "";

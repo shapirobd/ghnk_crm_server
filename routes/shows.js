@@ -69,7 +69,7 @@ router.post("/", ensureLoggedIn, async function (req, res, next) {
 router.delete("/", authenticateJWT, async function (req, res, next) {
 	try {
 		console.log("req.body: ", req.body);
-		const resp = await Show.delete(req.body.showID);
+		const resp = await Show.delete(req.body.showID, req.body.setPreviousShow);
 		return res.json(resp);
 	} catch (e) {
 		return next(e);

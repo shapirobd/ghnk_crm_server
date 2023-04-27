@@ -27,20 +27,30 @@ class Show {
 	 */
 	static async findAll(getVenueNames, forSite) {
 		let sql = "";
+		let sql_prev = "";
 		if (getVenueNames) {
 			sql =
-				"SELECT s.id, v.name AS venue_name, s.date, s.time, s.ticket_link, s.is_solo FROM shows s JOIN venues v ON s.venueID = v.id ORDER BY s.id";
+				"SELECT s.id, v.name AS venue_name, s.date, s.time, s.ticket_link, s.is_solo FROM shows s JOIN venues v ON s.venueID = v.id ORDER BY s.date ASC";
+			sql_prev =
+				"SELECT s.id, v.name AS venue_name, s.date, s.time, s.ticket_link, s.is_solo FROM shows_previous s JOIN venues v ON s.venueID = v.id ORDER BY s.date DESC";
 		} else if (forSite) {
 			sql =
-				"SELECT v.name AS venue, v.address, s.date, s.time, v.link AS venueLink, s.ticket_link AS ticketLink, s.is_solo AS solo FROM shows s JOIN venues v ON s.venueID = v.id ORDER BY s.id";
+				"SELECT v.name AS venue, v.address, v.city, v.state, s.date, s.time, v.link AS venueLink, s.ticket_link AS ticketLink, s.is_solo AS solo FROM shows s JOIN venues v ON s.venueID = v.id ORDER BY s.date ASC";
+			sql_prev =
+				"SELECT v.name AS venue, v.address, v.city, v.state, s.date, s.time, v.link AS venueLink, s.ticket_link AS ticketLink, s.is_solo AS solo FROM shows_previous s JOIN venues v ON s.venueID = v.id ORDER BY s.date DESC";
 		} else {
-			sql = sql =
-				"SELECT id, venueID, date, time, ticket_link, is_solo FROM shows ORDER BY id";
+			sql =
+				"SELECT id, venueID, date, time, ticket_link, is_solo FROM shows ORDER BY date ASC";
+			sql_prev =
+				"SELECT id, venueID, date, time, ticket_link, is_solo FROM shows_previous ORDER BY date DESC";
 		}
 		connect();
 		const results = await db.promise().query(sql);
+		connect();
+		const results_prev = await db.promise().query(sql_prev);
 		console.log("results: ", results[0]);
-		return results[0];
+		console.log("results_prev: ", results_prev[0]);
+		return { shows : results[0], shows_prev : results_prev[0] };
 	}
 
 	/**
@@ -73,10 +83,17 @@ class Show {
 	 *  Finds and returns all users from the database.
 	 * @return {Array} Array of user objects (each object containing username, email, first_name, last_name)
 	 */
-	static async delete(showID) {
+	static async delete(showID, setPreviousShow) {
 		console.log(showID);
+		let backup_sql = `INSERT INTO shows_previous (venueID, date, time, ticket_link, is_solo) 
+										  (SELECT venueID, date, time, ticket_link, is_solo FROM shows WHERE id = ${showID})`;
 		let sql = "DELETE FROM shows WHERE id = " + showID;
 		console.log(sql);
+		if (setPreviousShow) {
+			connect();
+			const backup_results = await db.promise().query(backup_sql);
+			console.log("backup_results: ", backup_results[0]);
+		}
 		connect();
 		const results = await db.promise().query(sql);
 		console.log("results: ", results[0]);
@@ -91,12 +108,17 @@ class Show {
 			venueID = resp[0].id;
 		}
 		console.log("venueID", venueID);
-		let columns = ["venueID", "date", "time", "is_solo"];
-		let values = [venueID, `'${date}'`, `'${time}'`, is_solo];
+		let columns = ["venueID", "date", "is_solo"];
+		let values = [venueID, `'${date}'`, is_solo];
 
 		if (ticket_link) {
 			columns.push("ticket_link");
 			values.push("'" + ticket_link + "'");
+		}
+
+		if (time) {
+			columns.push("time");
+			values.push("'" + time + "'");
 		}
 
 		let sql = "UPDATE shows SET ";
@@ -107,6 +129,8 @@ class Show {
 			valuesString += `${columns[i]} = ${values[i]}`;
 		}
 		sql += `${valuesString} WHERE id = ${showID}`;
+
+		console.log('sql = ', sql);
 		connect();
 		const results = await db.promise().query(sql);
 		console.log("results: ", results[0]);
