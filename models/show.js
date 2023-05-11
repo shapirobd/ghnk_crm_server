@@ -30,19 +30,19 @@ class Show {
 		let sql_prev = "";
 		if (getVenueNames) {
 			sql =
-				"SELECT s.id, v.name AS venue_name, s.date, s.time, s.ticket_link, s.is_solo FROM shows s JOIN venues v ON s.venueID = v.id ORDER BY s.date ASC";
+				"SELECT s.id, v.name AS venue_name, s.other_artists, s.date, s.time, s.ticket_link, s.is_solo FROM shows s JOIN venues v ON s.venueID = v.id ORDER BY s.date ASC";
 			sql_prev =
-				"SELECT s.id, v.name AS venue_name, s.date, s.time, s.ticket_link, s.is_solo FROM shows_previous s JOIN venues v ON s.venueID = v.id ORDER BY s.date DESC";
+				"SELECT s.id, v.name AS venue_name, s.other_artists, s.date, s.time, s.ticket_link, s.is_solo FROM shows_previous s JOIN venues v ON s.venueID = v.id ORDER BY s.date DESC";
 		} else if (forSite) {
 			sql =
-				"SELECT v.name AS venue, v.address, v.city, v.state, s.date, s.time, v.link AS venueLink, s.ticket_link AS ticketLink, s.is_solo AS solo FROM shows s JOIN venues v ON s.venueID = v.id ORDER BY s.date ASC";
+				"SELECT v.name AS venue, v.address, v.city, v.state, s.other_artists, s.date, s.time, v.link AS venueLink, s.ticket_link AS ticketLink, s.is_solo AS solo FROM shows s JOIN venues v ON s.venueID = v.id ORDER BY s.date ASC";
 			sql_prev =
-				"SELECT v.name AS venue, v.address, v.city, v.state, s.date, s.time, v.link AS venueLink, s.ticket_link AS ticketLink, s.is_solo AS solo FROM shows_previous s JOIN venues v ON s.venueID = v.id ORDER BY s.date DESC";
+				"SELECT v.name AS venue, v.address, v.city, v.state, s.other_artists, s.date, s.time, v.link AS venueLink, s.ticket_link AS ticketLink, s.is_solo AS solo FROM shows_previous s JOIN venues v ON s.venueID = v.id ORDER BY s.date DESC";
 		} else {
 			sql =
-				"SELECT id, venueID, date, time, ticket_link, is_solo FROM shows ORDER BY date ASC";
+				"SELECT id, venueID, other_artists, date, time, ticket_link, is_solo FROM shows ORDER BY date ASC";
 			sql_prev =
-				"SELECT id, venueID, date, time, ticket_link, is_solo FROM shows_previous ORDER BY date DESC";
+				"SELECT id, venueID, other_artists, date, time, ticket_link, is_solo FROM shows_previous ORDER BY date DESC";
 		}
 		connect();
 		const results = await db.promise().query(sql);
@@ -66,10 +66,8 @@ class Show {
 			venueID = resp[0].id;
 		}
 
-		let columns = `(venueID, date, time${ticket_link ? ", ticket_link" : ""})`;
-		let values = `(${venueID}, '${date}', '${time}'${
-			ticket_link ? ", '" + ticket_link + "'" : ""
-		})`;
+		let columns = `(venueID, date, time${ticket_link ? ", ticket_link" : ""}${other_artists ? ", other_artists" : ""})`;
+		let values = `(${venueID}, '${date}', '${time}'${ticket_link ? ", '" + ticket_link + "'" : ""}${other_artists ? ", '" + other_artists + "'" : ""})`;
 		const sql = `INSERT INTO shows ${columns} VALUES ${values}`;
 		console.log(sql);
 
@@ -85,8 +83,8 @@ class Show {
 	 */
 	static async delete(showID, setPreviousShow) {
 		console.log(showID);
-		let backup_sql = `INSERT INTO shows_previous (venueID, date, time, ticket_link, is_solo) 
-										  (SELECT venueID, date, time, ticket_link, is_solo FROM shows WHERE id = ${showID})`;
+		let backup_sql = `INSERT INTO shows_previous (venueID, date, time, ticket_link, is_solo, other_artists) 
+										  (SELECT venueID, date, time, ticket_link, is_solo, other_artists FROM shows WHERE id = ${showID})`;
 		let sql = "DELETE FROM shows WHERE id = " + showID;
 		console.log(sql);
 		if (setPreviousShow) {
@@ -101,7 +99,7 @@ class Show {
 	}
 
 	static async updateShow(data, showID) {
-		let { venueID, date, time, is_solo, ticket_link } = data;
+		let { venueID, date, time, is_solo, ticket_link, other_artists } = data;
 
 		if (!venueID && data.newVenue) {
 			const resp = await Venue.create(data.newVenue);
@@ -119,6 +117,11 @@ class Show {
 		if (time) {
 			columns.push("time");
 			values.push("'" + time + "'");
+		}
+
+		if (other_artists) {
+			columns.push("other_artists");
+			values.push("'" + other_artists + "'");
 		}
 
 		let sql = "UPDATE shows SET ";
