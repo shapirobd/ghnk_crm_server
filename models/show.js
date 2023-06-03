@@ -59,7 +59,7 @@ class Show {
 	 * @return {Array} Array of user objects (each object containing username, email, first_name, last_name)
 	 */
 	static async create(data) {
-		let { venueID, date, time, ticket_link } = data;
+		let { venueID, date, time, ticket_link, other_artists } = data;
 
 		if (!venueID && data.newVenue) {
 			const resp = await Venue.create(data.newVenue);
