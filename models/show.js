@@ -40,9 +40,9 @@ class Show {
 				"SELECT v.name AS venue, v.address, v.city, v.state, s.other_artists, s.date, s.time, v.link AS venueLink, s.ticket_link AS ticketLink, s.is_solo AS solo FROM shows s JOIN venues v ON s.venueID = v.id WHERE s.date <= (NOW() - INTERVAL 8 HOUR) ORDER BY s.date DESC";
 		} else {
 			sql =
-				"SELECT id, venueID, other_artists, date, time, ticket_link, is_solo FROM shows WHERE s.date > (NOW() - INTERVAL 8 HOUR) ORDER BY date ASC";
+				"SELECT id, venueID, other_artists, date, time, ticket_link, is_solo FROM shows s WHERE s.date > (NOW() - INTERVAL 8 HOUR) ORDER BY date ASC";
 			sql_prev =
-				"SELECT id, venueID, other_artists, date, time, ticket_link, is_solo FROM shows WHERE s.date <= (NOW() - INTERVAL 8 HOUR) ORDER BY date DESC";
+				"SELECT id, venueID, other_artists, date, time, ticket_link, is_solo FROM shows s WHERE s.date <= (NOW() - INTERVAL 8 HOUR) ORDER BY date DESC";
 		}
 		connect();
 		const results = await db.promise().query(sql);
