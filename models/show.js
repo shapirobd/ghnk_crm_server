@@ -30,7 +30,7 @@ class Show {
 		let sql_prev = "";
 		if (getVenueNames) {
 			sql =
-				"SELECT s.id, v.nameeeee AS venue_name, s.other_artists, s.date, s.time, s.ticket_link, s.is_solo FROM shows s JOIN venues v ON s.venueID = v.id WHERE s.date > (NOW() - INTERVAL 8 HOUR) ORDER BY s.date ASC";
+				"SELECT s.id, v.name AS venue_name, s.other_artists, s.date, s.time, s.ticket_link, s.is_solo FROM shows s JOIN venues v ON s.venueID = v.id WHERE s.date > (NOW() - INTERVAL 8 HOUR) ORDER BY s.date ASC";
 			sql_prev =
 				"SELECT s.id, v.name AS venue_name, s.other_artists, s.date, s.time, s.ticket_link, s.is_solo FROM shows s JOIN venues v ON s.venueID = v.id WHERE s.date <= (NOW() - INTERVAL 8 HOUR) ORDER BY s.date DESC";
 		} else if (forSite) {
@@ -68,7 +68,7 @@ class Show {
 
 		let columns = `(venueID, date, time${ticket_link ? ", ticket_link" : ""}${other_artists ? ", other_artists" : ""})`;
 		let values = `(${venueID}, '${date}', '${time}'${ticket_link ? ", '" + ticket_link + "'" : ""}${other_artists ? ", '" + other_artists + "'" : ""})`;
-		const sql = `INSERT INTO shows ${columns} VALUES ${values}`;
+		const sql = `INSERT INTO showss ${columns} VALUES ${values}`;
 		console.log(sql);
 
 		connect();
