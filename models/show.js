@@ -68,7 +68,7 @@ class Show {
 
 		let columns = `(venueID, date, time${ticket_link ? ", ticket_link" : ""}${other_artists ? ", other_artists" : ""})`;
 		let values = `(${venueID}, '${date}', '${time}'${ticket_link ? ", '" + ticket_link + "'" : ""}${other_artists ? ", '" + other_artists + "'" : ""})`;
-		const sql = `INSERT INTO showss ${columns} VALUES ${values}`;
+		const sql = `INSERT INTO shows ${columns} VALUES ${values}`;
 		console.log(sql);
 
 		connect();
