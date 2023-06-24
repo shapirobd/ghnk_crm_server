@@ -63,8 +63,7 @@ router.post("/", ensureLoggedIn, async function (req, res, next) {
 		return res.json(resp);
 	} catch (e) {
 		console.log(e)
-		// return next(e);
-		return e;
+		return next(e);
 	}
 });
 
