@@ -30,7 +30,7 @@ app.use(function (req, res, next) {
 app.use(function (err, req, res, next) {
 	res.status(err.status || 500);
 
-	return res.json({
+	return res.status(err.status).json({
 		error: err,
 		message: err.message,
 	});
