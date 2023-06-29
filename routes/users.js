@@ -49,7 +49,9 @@ router.get("/:username", async function (req, res, next) {
  */
 router.patch("/:username", authenticateJWT, async function (req, res, next) {
 	try {
-		continueIfValidEdit(req, next);
+		if (!Object.keys(req.body.data).includes("dark_mode")) {
+			continueIfValidEdit(req, next);
+		}
 		const resp = await User.editProfile(req.body.data, req.params.username);
 		return res.json(resp);
 	} catch (e) {
