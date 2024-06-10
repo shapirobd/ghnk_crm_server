@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const { BCRYPT_WORK_FACTOR, SECRET_KEY } = require("../config");
 const { default: axios } = require("axios");
+const escape = require("../helpers/escape");
 // const convertDate = require("../helpers/convertDate");
 
 /**
@@ -41,7 +42,7 @@ class Single {
 		let { name, url, code } = data;
 
 		let columns = `(name, url, code)`;
-		let values = `('${name}', '${url}', '${code}')`;
+		let values = `('${escape(name)}', '${escape(url)}', '${escape(code)}')`;
 		const sql = `INSERT INTO singles ${columns} VALUES ${values}`;
 		console.log(sql);
 
@@ -66,7 +67,7 @@ class Single {
 
 		console.log("code", code);
 		let columns = ["name", "url", "code"];
-		let values = [`'${name}'`, `'${url}'`, `'${code}'`];
+		let values = [`'${escape(name)}'`, `'${escape(url)}'`, `'${escape(code)}'`];
 
 		let sql = "UPDATE singles SET ";
 		let valuesString = "";
