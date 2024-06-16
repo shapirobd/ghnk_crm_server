@@ -26,7 +26,7 @@ class Single {
 	 * @return {Array} Array of user objects (each object containing username, email, first_name, last_name)
 	 */
 	static async findAll() {
-		const sql = "SELECT id, name, url, code FROM singles ORDER BY id DESC";
+		const sql = "SELECT id, name, url, code, display_order, show_on_site FROM singles ORDER BY id DESC";
 		connect();
 		const results = await db.promise().query(sql);
 		console.log("results: ", results[0]);
