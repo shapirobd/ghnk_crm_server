@@ -30,19 +30,19 @@ class Show {
 		let sql_prev = "";
 		if (getVenueNames) {
 			sql =
-				"SELECT s.id, v.name AS venue_name, s.other_artists, s.date, s.time, s.ticket_link, s.is_solo FROM shows s JOIN venues v ON s.venueID = v.id WHERE s.date > (NOW() - INTERVAL 8 HOUR) ORDER BY s.date ASC";
+				"SELECT s.id, v.name AS venue_name, s.other_artists, s.date, s.time, s.ticket_link, s.is_solo FROM shows s JOIN venues v ON s.venueID = v.id WHERE s.date > (NOW() - INTERVAL 24 HOUR) ORDER BY s.date ASC";
 			sql_prev =
-				"SELECT s.id, v.name AS venue_name, s.other_artists, s.date, s.time, s.ticket_link, s.is_solo FROM shows s JOIN venues v ON s.venueID = v.id WHERE s.date <= (NOW() - INTERVAL 8 HOUR) ORDER BY s.date DESC";
+				"SELECT s.id, v.name AS venue_name, s.other_artists, s.date, s.time, s.ticket_link, s.is_solo FROM shows s JOIN venues v ON s.venueID = v.id WHERE s.date <= (NOW() - INTERVAL 24 HOUR) ORDER BY s.date DESC";
 		} else if (forSite) {
 			sql =
-				"SELECT v.name AS venue, v.address, v.city, v.state, s.other_artists, s.date, s.time, v.link AS venueLink, s.ticket_link AS ticketLink, s.is_solo AS solo FROM shows s JOIN venues v ON s.venueID = v.id WHERE s.date > (NOW() - INTERVAL 8 HOUR) ORDER BY s.date ASC";
+				"SELECT v.name AS venue, v.address, v.city, v.state, s.other_artists, s.date, s.time, v.link AS venueLink, s.ticket_link AS ticketLink, s.is_solo AS solo FROM shows s JOIN venues v ON s.venueID = v.id WHERE s.date > (NOW() - INTERVAL 24 HOUR) ORDER BY s.date ASC";
 			sql_prev =
-				"SELECT v.name AS venue, v.address, v.city, v.state, s.other_artists, s.date, s.time, v.link AS venueLink, s.ticket_link AS ticketLink, s.is_solo AS solo FROM shows s JOIN venues v ON s.venueID = v.id WHERE s.date <= (NOW() - INTERVAL 8 HOUR) ORDER BY s.date DESC";
+				"SELECT v.name AS venue, v.address, v.city, v.state, s.other_artists, s.date, s.time, v.link AS venueLink, s.ticket_link AS ticketLink, s.is_solo AS solo FROM shows s JOIN venues v ON s.venueID = v.id WHERE s.date <= (NOW() - INTERVAL 24 HOUR) ORDER BY s.date DESC";
 		} else {
 			sql =
-				"SELECT id, venueID, other_artists, date, time, ticket_link, is_solo FROM shows s WHERE s.date > (NOW() - INTERVAL 8 HOUR) ORDER BY date ASC";
+				"SELECT id, venueID, other_artists, date, time, ticket_link, is_solo FROM shows s WHERE s.date > (NOW() - INTERVAL 24 HOUR) ORDER BY date ASC";
 			sql_prev =
-				"SELECT id, venueID, other_artists, date, time, ticket_link, is_solo FROM shows s WHERE s.date <= (NOW() - INTERVAL 8 HOUR) ORDER BY date DESC";
+				"SELECT id, venueID, other_artists, date, time, ticket_link, is_solo FROM shows s WHERE s.date <= (NOW() - INTERVAL 24 HOUR) ORDER BY date DESC";
 		}
 		connect();
 		const results = await db.promise().query(sql);
