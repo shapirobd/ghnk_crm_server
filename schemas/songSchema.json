@@ -9,7 +9,8 @@
 		{
 			"name": "test name",
 			"url": "test url",
-			"code": "test code"
+			"code": "test code",
+			"category": "Single"
 		}
 	],
 	"required": ["name", "url", "code"],
@@ -37,6 +38,15 @@
 			"description": "An explanation about the purpose of this instance.",
 			"default": "",
 			"examples": ["test code"]
+		},
+		"category": {
+			"$id": "#/properties/category",
+			"type": "string",
+			"title": "The category schema",
+			"description": "Which music category this song belongs to.",
+			"default": "Single",
+			"enum": ["Single", "New Release"],
+			"examples": ["Single", "New Release"]
 		}
 	},
 	"additionalProperties": true

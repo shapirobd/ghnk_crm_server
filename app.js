@@ -1,5 +1,5 @@
 const albumsRoutes = require("./routes/albums");
-const singlesRoutes = require("./routes/singles");
+const songsRoutes = require("./routes/songs");
 const showsRoutes = require("./routes/shows");
 const venuesRoutes = require("./routes/venues");
 const usersRoutes = require("./routes/users");
@@ -14,7 +14,7 @@ app.use(express.json());
 app.use(cors());
 
 app.use("/albums", albumsRoutes);
-app.use("/singles", singlesRoutes);
+app.use("/songs", songsRoutes);
 app.use("/shows", showsRoutes);
 app.use("/venues", venuesRoutes);
 app.use("/users", usersRoutes);
